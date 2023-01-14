@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import Jwt from "jsonwebtoken";
+import bcryptjs from "bcryptjs";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -23,6 +26,14 @@ const userSchema = new mongoose.Schema({
 },
 {
     timestamps: true,
+});
+
+// Mongoose pre hook for "save"
+userSchema.pre("save", async function (next){
+    if (this.isModified("password")){
+        this.password = await bcryptjs.hash(this.password, 10);
+    }
+    next();
 });
 
 export default mongoose.model("User", userSchema);
