@@ -42,6 +42,16 @@ userSchema.methods = {
     comparePassword: async function(enteredPassword){
         return await bcryptjs.compare(enteredPassword, this.password);
     },
+    getJwtToken: function(){
+        return Jwt.sign({
+            _id: this._id,
+            email: this.email,
+        },
+        config.JWT_SECRET,
+        {
+           expiresIn: config.JWT_EXPIRY, 
+        });
+    },
 }
 
 export default mongoose.model("User", userSchema);
