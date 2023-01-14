@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
+import config from "../config/config";
 import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
@@ -35,5 +36,12 @@ userSchema.pre("save", async function (next){
     }
     next();
 });
+
+// Mongoose methods
+userSchema.methods = {
+    comparePassword: async function(enteredPassword){
+        return await bcryptjs.compare(enteredPassword, this.password);
+    },
+}
 
 export default mongoose.model("User", userSchema);
