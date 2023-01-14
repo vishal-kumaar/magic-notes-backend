@@ -1,0 +1,17 @@
+{
+  "name": "Todo-App",
+  "version": "1.0.0",
+  "description": "This is the backend of the Todo Application. Todo app is the application where user can save there task to remember",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.3"
+  }
+}
