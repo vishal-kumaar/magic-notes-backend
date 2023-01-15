@@ -47,7 +47,7 @@ export const signUp = asyncHandler(async (req, res) => {
 /***************************************************
  * @LOGIN
  * @route http://localhost:4000/api/auth/login
- * @description User login controller for login an existing new user
+ * @description User login controller for login an existing user
  * @parameters email, password
  * @return User Object
  ************************************************/
@@ -80,5 +80,25 @@ export const logIn = asyncHandler(async (res, req) => {
         success: true,
         token,
         user,
+    });
+});
+
+/***************************************************
+ * @LOGOUT
+ * @route http://localhost:4000/api/auth/logout
+ * @description User logout controller for logout an logged in user by clearing the cookies
+ * @parameters None
+ * @return Success message
+ ************************************************/
+
+export const logOut = asyncHandler(async(req, res) => {
+    res.cookie("token", null, {
+        expires: new Date.now(),
+        httpOnly: true,
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out",
     });
 });
