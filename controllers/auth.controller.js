@@ -3,6 +3,7 @@ import asyncHandler from "../helpers/asyncHandler";
 import CustomError from "../utils/CustomError"
 import cookieOptions from "../../../Mega_Project/utils/cookieOptions";
 import mailSender from "../utils/mailSender";
+import crypto from "crypto";
 
 /***************************************************
  * @SIGNUP
@@ -107,7 +108,7 @@ export const logOut = asyncHandler(async(req, res) => {
  * @FORGOT_PASSWORD
  * @route http://localhost:4000/api/auth/password/forgot
  * @description User forgot password controller for forgot the password
- * @description User submit email to generate a token
+ * @description User submit email to generate a forget password token
  * @description User receives an url to forgot the password
  * @parameters email
  * @return Success message
@@ -123,7 +124,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
     const user = await User.findOne({email});
 
     if (!user){
-        throw new CustomError("User is not found", 400);
+        throw new CustomError("Email is invalid", 400);
     }
 
     const resetToken = user.generateForgotPasswordToken();
@@ -151,4 +152,58 @@ export const forgotPassword = asyncHandler(async(req, res) => {
         
         throw new CustomError(error.message || "Failed to send mail", 400);
     }
+});
+
+/***************************************************
+ * @RESET_PASSWORD
+ * @route http://localhost:4000/api/auth/password/reset/resetToken
+ * @description User reset password controller for reset the password
+ * @description User submit email to generate a token
+ * @parameters Password and Confirm password
+ * @return Success message
+ ************************************************/
+
+export const resetPassword = asyncHandler(async(req, res) => {
+    const {resetToken} = req.params;
+    
+    if (!resetToken){
+        throw new CustomError("Reset token is required", 400);
+    }
+
+    const resetPasswordToken = crypto.createHash("sha265").update(resetToken).digest("hex");
+    
+    const {password, confirmPassword} = req.body;
+
+    if (!password || !confirmPassword){
+        throw new CustomError("Password or confirm are required", 400);
+    }
+
+    if (password !== confirmPassword){
+        throw new CustomError("Confirm password must be same as the password", 400);
+    }
+
+    const user = await User.findOne({
+        forgotPasswordToken: resetPasswordToken,
+        forgotPasswordExpiry: {$gt: new Date.now()},
+    });
+
+    if (!user){
+        throw new CustomError("Something went wrong", 400);
+    }
+
+    user.password = password;
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+
+    user.save({validateBeforeSave: true});
+
+    user.password = undefined;
+
+    const token = user.getJwtToken();
+    res.cookies("token", token, cookieOptions);
+
+    res.status(200).json({
+        success: true,
+        user
+    });
 });
