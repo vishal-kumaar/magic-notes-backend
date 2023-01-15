@@ -92,7 +92,7 @@ export const logIn = asyncHandler(async (res, req) => {
  * @return Success message
  ************************************************/
 
-export const logOut = asyncHandler(async(req, res) => {
+export const logOut = asyncHandler(async(_req, res) => {
     res.cookie("token", null, {
         expires: new Date.now(),
         httpOnly: true,
@@ -160,7 +160,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
  * @description User reset password controller for reset the password
  * @description User submit email to generate a token
  * @parameters Password and Confirm password
- * @return Success message
+ * @return User object
  ************************************************/
 
 export const resetPassword = asyncHandler(async(req, res) => {
@@ -195,7 +195,7 @@ export const resetPassword = asyncHandler(async(req, res) => {
     user.forgotPasswordToken = undefined;
     user.forgotPasswordExpiry = undefined;
 
-    user.save({validateBeforeSave: true});
+    await user.save({validateBeforeSave: true});
 
     user.password = undefined;
 
@@ -206,4 +206,48 @@ export const resetPassword = asyncHandler(async(req, res) => {
         success: true,
         user
     });
+});
+
+/***************************************************
+ * @UPDATE_PASSWORD
+ * @route http://localhost:4000/api/auth/password/update/id
+ * @description User update password controller for update the old password
+ * @parameters Old password and new password
+ * @return Success message
+ ************************************************/
+
+export const updatePassword = asyncHandler(async(req, res) => {
+    const {id} = req.params;
+    if (!id){
+        throw new CustomError("Id is required", 400);
+    }
+
+    const {oldPassword, newPassword} = req.body;
+    if (!oldPassword && !newPassword){
+        throw new CustomError("Old or new password are required", 400);
+    }
+
+    if (oldPassword === newPassword){
+        throw new CustomError("Both password are password", 400);
+    }
+
+    const user = await User.findOne({id});
+
+    if (!user){
+        throw new CustomError("User not found", 400);
+    }
+
+    if (!user.comparePassword(oldPassword)){
+        throw new CustomError("Password is wrong", 400);
+    }
+
+    user.password = newPassword;
+    await user.save({validateBeforeSave: true});
+
+    user.password = undefined;
+
+    res.status(200).json({
+        success: true,
+        user,
+    })
 });
