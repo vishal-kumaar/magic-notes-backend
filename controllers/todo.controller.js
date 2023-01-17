@@ -6,7 +6,7 @@ import CustomError from "../utils/CustomError";
  * @CREATE_TODO
  * @route http://localhost:4000/api/todo/createTodo
  * @description User create todo controller for creating a new todo
- * @parameters title and array of tasks
+ * @parameters user object, title and task
  * @return Todo Object
  ************************************************/
 
@@ -16,13 +16,14 @@ export const createTodo = asyncHander(async(req, res) => {
         throw new CustomError("User not found", 400);
     }
 
-    const {title} = req.body;
-    if (!title){
-        throw new CustomError("Title are required", 400);
+    const {title, task} = req.body;
+    if (!title || !task){
+        throw new CustomError("Title or task are required", 400);
     }
 
     const todo = await Todo.create({
         title,
+        task,
         user: user._id,
     });
 
@@ -37,14 +38,14 @@ export const createTodo = asyncHander(async(req, res) => {
 });
 
 /***************************************************
- * @ADD_TASK
- * @route http://localhost:4000/api/todo/addTask/:id
- * @description User add task controller for adding task in todo
- * @parameters array of tasks
+ * @EDIT_TASK
+ * @route http://localhost:4000/api/todo/editTodo/:id
+ * @description User edit task controller for editing existing task in todo
+ * @parameters todo id and task
  * @return Todo Object
  ************************************************/
 
-export const addTask = asyncHander(async(req, res) => {
+export const editTask = asyncHander(async(req, res) => {
     const {id} = req.params;
     if (!id){
         throw new CustomError("Todo id is required", 400);
@@ -60,7 +61,7 @@ export const addTask = asyncHander(async(req, res) => {
         throw new CustomError("Todo not found", 400);
     }
 
-    todo.tasks.push({task});
+    todo.task = task;
     await todo.save({validateBeforeSave: true});
 
     res.status(200).json({

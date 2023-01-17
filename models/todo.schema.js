@@ -7,18 +7,14 @@ const todoSchema = new mongoose.Schema({
         maxLength: [50, "Title must be at most 50 characters"],
         trim: true,
     },
-    tasks: [
-        {
-            task: {
-                type: String,
-                required: true,
-            },
-            checked: {
-                type: Boolean,
-                default: false,
-            }
-        }
-    ],
+    task: {
+        type: String,
+        required: true,
+    },
+    checked: {
+        type: Boolean,
+        default: false,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
