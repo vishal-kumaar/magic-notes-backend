@@ -103,3 +103,30 @@ export const checkTask = asyncHander(async(req, res) => {
         todo
     })
 });
+
+/***************************************************
+ * @GET_ALL_TASK
+ * @route http://localhost:4000/api/todo
+ * @description User get all todo controller for getting all the todo
+ * @parameters user id
+ * @return Todos Object
+ ************************************************/
+
+export const getAllTodos = asyncHander(async(req, res) => {
+    const {user} = req;
+    if (!user){
+        throw new CustomError("Not authorized to access this route", 400);
+    }
+
+    const userId = user._id;
+
+    const todos = await Todo.find({user: userId});
+    if (!todos){
+        throw new CustomError("Todo not found", 400);
+    }
+
+    res.status(200).json({
+        success: true,
+        todos
+    });
+});
