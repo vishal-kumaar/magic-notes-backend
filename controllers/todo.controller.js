@@ -39,15 +39,15 @@ export const createTodo = asyncHander(async(req, res) => {
 
 /***************************************************
  * @EDIT_TASK
- * @route http://localhost:4000/api/todo/editTask/:id
+ * @route http://localhost:4000/api/todo/editTask/:todoId
  * @description User edit task controller for editing existing task in todo
  * @parameters todo id and task
  * @return Todo Object
  ************************************************/
 
 export const editTask = asyncHander(async(req, res) => {
-    const {id} = req.params;
-    if (!id){
+    const {todoId} = req.params;
+    if (!todoId){
         throw new CustomError("Todo id is required", 400);
     }
 
@@ -56,7 +56,7 @@ export const editTask = asyncHander(async(req, res) => {
         throw new CustomError("Task is required", 400);
     }
 
-    const todo = await Todo.findOne({id});
+    const todo = await Todo.findOne({todoId});
     if (!todo){
         throw new CustomError("Todo not found", 400);
     }
@@ -72,19 +72,19 @@ export const editTask = asyncHander(async(req, res) => {
 
 /***************************************************
  * @CHECK_TASK
- * @route http://localhost:4000/api/todo/checkTodo/:id
+ * @route http://localhost:4000/api/todo/checkTodo/:todoId
  * @description User check task controller for checking the existing task in todo
  * @parameters todo id
  * @return Todo Object
  ************************************************/
 
 export const checkTask = asyncHander(async(req, res) => {
-    const {id} = req.params;
-    if (!id){
+    const {todoId} = req.params;
+    if (!todoId){
         throw new CustomError("Todo id is required", 400);
     }
 
-    const todo = await Todo.findOne({id});
+    const todo = await Todo.findOne({todoId});
     if (!todo){
         throw new CustomError("Todo is not found", 400);
     }
@@ -129,4 +129,30 @@ export const getAllTodos = asyncHander(async(req, res) => {
         success: true,
         todos
     });
+});
+
+/***************************************************
+ * @DELETE_TODO
+ * @route http://localhost:4000/api/todo/deleteTodo/:todoId
+ * @description User delete todo controller for deleting the exisiting todo
+ * @parameters todo id
+ * @return Success message
+ ************************************************/
+
+export const deleteTodo = asyncHander(async(req, res) => {
+    const {todoId} = req.params;
+    if (!todoId){
+        throw new CustomError("Todo id is required", 400);
+    }
+
+    const todo = await Todo.findByIdAndDelete(todoId);
+
+    if (!todo){
+        throw new CustomError("Todo not exist", 400);
+    }
+
+    res.status(200).json({
+        succes: true,
+        messase: "Todo deleted successfully",
+    })
 });
