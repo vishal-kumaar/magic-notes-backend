@@ -156,3 +156,36 @@ export const deleteTodo = asyncHander(async(req, res) => {
         messase: "Todo deleted successfully",
     })
 });
+
+/***************************************************
+ * @EDIT_TODO_TITLE
+ * @route http://localhost:4000/api/todo/editTitle/:todoId
+ * @description User edit todo title controller for editing the exisiting todo title
+ * @parameters todo id
+ * @return Todo object
+ ************************************************/
+
+export const editTodoTitle = asyncHander(async(req, res) => {
+    const {todoId} = req.params;
+    if (!todoId){
+        throw new CustomError("Todo id is required", 400);
+    }
+
+    const {title} = req.body;
+    if (!title){
+        throw new CustomError("Title is required", 400);
+    }
+
+    const todo = await Todo.findOne({todoId});
+    if (!todo){
+        throw new CustomError("Todo is not exist", 400);
+    }
+
+    todo.title = title;
+    await todo.save({validateBeforeSave});
+
+    res.status(200).json({
+        success: true,
+        todo
+    })
+});
