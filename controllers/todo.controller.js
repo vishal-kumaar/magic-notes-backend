@@ -39,7 +39,7 @@ export const createTodo = asyncHander(async(req, res) => {
 
 /***************************************************
  * @EDIT_TASK
- * @route http://localhost:4000/api/todo/editTodo/:id
+ * @route http://localhost:4000/api/todo/editTask/:id
  * @description User edit task controller for editing existing task in todo
  * @parameters todo id and task
  * @return Todo Object
@@ -68,4 +68,38 @@ export const editTask = asyncHander(async(req, res) => {
         success: true,
         todo
     });
+});
+
+/***************************************************
+ * @CHECK_TASK
+ * @route http://localhost:4000/api/todo/checkTodo/:id
+ * @description User check task controller for checking the existing task in todo
+ * @parameters todo id
+ * @return Todo Object
+ ************************************************/
+
+export const checkTask = asyncHander(async(req, res) => {
+    const {id} = req.params;
+    if (!id){
+        throw new CustomError("Todo id is required", 400);
+    }
+
+    const todo = await Todo.findOne({id});
+    if (!todo){
+        throw new CustomError("Todo is not found", 400);
+    }
+
+    if (todo.checked){
+        todo.checked = false;
+    }
+    else{
+        todo.checked = true;
+    }
+
+    await todo.save({validateBeforeSave: true});
+
+    res.status(200).json({
+        succes: true,
+        todo
+    })
 });
