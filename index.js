@@ -1,6 +1,6 @@
-import app from "./app";
+import app from "./app.js";
 import mongoose from "mongoose";
-import config from "./config/config";
+import config from "./config/config.js";
 
 const port = config.PORT;
 

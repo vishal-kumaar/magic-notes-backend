@@ -1,8 +1,8 @@
-import User from "../models/user.schema";
-import asyncHandler from "../helpers/asyncHandler";
-import CustomError from "../utils/CustomError"
-import cookieOptions from "../../../Mega_Project/utils/cookieOptions";
-import mailSender from "../utils/mailSender";
+import User from "../models/user.schema.js";
+import asyncHandler from "../helpers/asyncHandler.js";
+import CustomError from "../utils/CustomError.js"
+import cookieOptions from "../utils/cookieOptions.js";
+import mailSender from "../utils/mailSender.js";
 import crypto from "crypto";
 
 /***************************************************

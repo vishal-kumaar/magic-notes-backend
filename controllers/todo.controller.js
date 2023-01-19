@@ -1,6 +1,6 @@
-import Todo from "../models/todo.schema";
-import asyncHander from "../helpers/asyncHandler";
-import CustomError from "../utils/CustomError";
+import Todo from "../models/todo.schema.js";
+import asyncHander from "../helpers/asyncHandler.js";
+import CustomError from "../utils/CustomError.js";
 
 /***************************************************
  * @CREATE_TODO
