@@ -53,7 +53,7 @@ export const signUp = asyncHandler(async (req, res) => {
  * @return User Object
  ************************************************/
 
-export const logIn = asyncHandler(async (res, req) => {
+export const logIn = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
 
     if (!email || !password){

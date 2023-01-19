@@ -13,7 +13,7 @@ import {isLoggedIn} from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.post("/api/auth/signup", signUp);
-router.get("/api/auth/login", logIn);
+router.post("/api/auth/login", logIn);
 router.get("/api/auth/logout",isLoggedIn, logOut);
 router.put("/api/auth/password/forgot", forgotPassword);
 router.put("/api/auth/password/reset/:resetToken", resetPassword);
