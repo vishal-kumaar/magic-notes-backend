@@ -121,7 +121,7 @@ export const getAllTodos = asyncHander(async(req, res) => {
     const userId = user._id;
 
     const todos = await Todo.find({user: userId});
-    if (!todos){
+    if (todos.length == 0){
         throw new CustomError("Todo not found", 400);
     }
 
