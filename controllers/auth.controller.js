@@ -223,7 +223,7 @@ export const updatePassword = asyncHandler(async(req, res) => {
     }
 
     const {oldPassword, newPassword} = req.body;
-    if (!oldPassword && !newPassword){
+    if (!oldPassword || !newPassword){
         throw new CustomError("Old or new password are required", 400);
     }
 
@@ -231,18 +231,20 @@ export const updatePassword = asyncHandler(async(req, res) => {
         throw new CustomError("Both password are password", 400);
     }
 
-    const user = await User.findOne({id});
+    const user = await User.findById(id).select("+password");
 
     if (!user){
         throw new CustomError("User not found", 400);
     }
 
-    if (!user.comparePassword(oldPassword)){
+    const passwordMatched = await user.comparePassword(oldPassword);
+
+    if (!passwordMatched){
         throw new CustomError("Password is wrong", 400);
     }
 
     user.password = newPassword;
-    await user.save({validateBeforeSave: true});
+    await user.save();
 
     user.password = undefined;
 
