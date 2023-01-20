@@ -176,13 +176,13 @@ export const editTodoTitle = asyncHander(async(req, res) => {
         throw new CustomError("Title is required", 400);
     }
 
-    const todo = await Todo.findOne({todoId});
+    const todo = await Todo.findById(todoId);
     if (!todo){
         throw new CustomError("Todo is not exist", 400);
     }
 
     todo.title = title;
-    await todo.save({validateBeforeSave});
+    await todo.save({validateBeforeSave: true});
 
     res.status(200).json({
         success: true,
