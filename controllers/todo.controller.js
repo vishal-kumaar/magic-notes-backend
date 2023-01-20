@@ -56,7 +56,7 @@ export const editTask = asyncHander(async(req, res) => {
         throw new CustomError("Task is required", 400);
     }
 
-    const todo = await Todo.findOne({todoId});
+    const todo = await Todo.findById(todoId);
     if (!todo){
         throw new CustomError("Todo not found", 400);
     }
