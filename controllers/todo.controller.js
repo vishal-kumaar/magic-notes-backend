@@ -84,7 +84,7 @@ export const checkTask = asyncHander(async(req, res) => {
         throw new CustomError("Todo id is required", 400);
     }
 
-    const todo = await Todo.findOne({todoId});
+    const todo = await Todo.findById(todoId);
     if (!todo){
         throw new CustomError("Todo is not found", 400);
     }
