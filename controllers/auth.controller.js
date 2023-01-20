@@ -127,7 +127,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
         throw new CustomError("Email is invalid", 400);
     }
 
-    const resetToken = user.generateForgotPasswordToken();
+    const resetToken = await user.generateForgotPasswordToken();
     user.save({validateBeforeSave: true});
 
     const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/password/reset/${resetToken}`;
@@ -170,7 +170,9 @@ export const resetPassword = asyncHandler(async(req, res) => {
         throw new CustomError("Reset token is required", 400);
     }
 
-    const resetPasswordToken = crypto.createHash("sha265").update(resetToken).digest("hex");
+    const restToken = resetToken.toString("hex");
+
+    const resetPasswordToken = crypto.createHash("sha265").update(restToken).digest("hex");
     
     const {password, confirmPassword} = req.body;
 
@@ -184,7 +186,7 @@ export const resetPassword = asyncHandler(async(req, res) => {
 
     const user = await User.findOne({
         forgotPasswordToken: resetPasswordToken,
-        forgotPasswordExpiry: {$gt: new Date.now()},
+        forgotPasswordExpiry: {$gt: Date.now()},
     });
 
     if (!user){
@@ -195,7 +197,7 @@ export const resetPassword = asyncHandler(async(req, res) => {
     user.forgotPasswordToken = undefined;
     user.forgotPasswordExpiry = undefined;
 
-    await user.save({validateBeforeSave: true});
+    await user.save();
 
     user.password = undefined;
 
