@@ -169,25 +169,25 @@ export const resetPassword = asyncHandler(async(req, res) => {
     if (!resetToken){
         throw new CustomError("Reset token is required", 400);
     }
-
-    const restToken = resetToken.toString("hex");
-
-    const resetPasswordToken = crypto.createHash("sha265").update(restToken).digest("hex");
     
     const {password, confirmPassword} = req.body;
 
     if (!password || !confirmPassword){
         throw new CustomError("Password or confirm are required", 400);
     }
-
+    
     if (password !== confirmPassword){
         throw new CustomError("Confirm password must be same as the password", 400);
     }
+    
+    const resetPasswordToken = crypto.createHash("sha512").update(resetToken).digest("hex");
 
     const user = await User.findOne({
         forgotPasswordToken: resetPasswordToken,
-        forgotPasswordExpiry: {$gt: Date.now()},
+        forgotPasswordExpiry: {$gt: Date.now()}
     });
+
+    console.log(user);
 
     if (!user){
         throw new CustomError("Something went wrong", 400);
@@ -202,7 +202,7 @@ export const resetPassword = asyncHandler(async(req, res) => {
     user.password = undefined;
 
     const token = user.getJwtToken();
-    res.cookies("token", token, cookieOptions);
+    res.cookie("token", token, cookieOptions);
 
     res.status(200).json({
         success: true,
