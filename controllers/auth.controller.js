@@ -219,7 +219,7 @@ export const resetPassword = asyncHandler(async(req, res) => {
  * @route http://localhost:4000/api/auth/password/update/id
  * @description User update password controller for update the old password
  * @parameters Old password and new password
- * @return Success message
+ * @return Success message with user object
  ************************************************/
 
 export const updatePassword = asyncHandler(async(req, res) => {
@@ -266,10 +266,10 @@ export const updatePassword = asyncHandler(async(req, res) => {
 
 /********************************************************
  * @GET_PROFILE
- * @route https://localhost:4000/api/auth/profile
- * @description Check for token and populate req.user
- * @parameters 
- * @return User object
+ * @route https://localhost:4000/api/auth/username/update/:id
+ * @description User update name controller for update the old name
+ * @parameters new name and password
+ * @return Success message with user object
 *********************************************************/
 
 export const updateName = asyncHandler(async(req, res) => {
@@ -297,11 +297,21 @@ export const updateName = asyncHandler(async(req, res) => {
     user.name = newName;
     user.save();
 
+    user.password = undefined;
+
     res.status(200).json({
         success: true,
         user
     })
-})
+});
+
+/********************************************************
+ * @GET_PROFILE
+ * @route https://localhost:4000/api/auth/profile
+ * @description Check for token and populate req.user
+ * @parameters 
+ * @return User object
+*********************************************************/
 
 export const getProfile = asyncHandler(async(req, res) => {
     const {user} = req;
