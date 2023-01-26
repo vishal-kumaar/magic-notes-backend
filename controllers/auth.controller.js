@@ -14,16 +14,20 @@ import crypto from "crypto";
  ************************************************/
 
 export const signUp = asyncHandler(async (req, res) => {
-    const {name, email, password} = req.body;
+    const {name, email, password, confirmPassword} = req.body;
     
-    if (!name || !email || !password){
+    if (!name || !email || !password || !confirmPassword){
         throw new CustomError("All fields are required", 400);
+    }
+
+    if (password !== confirmPassword){
+        throw new CustomError("Wrong confirm password", 400)
     }
 
     const existingUser = await User.findOne({email});
 
     if (existingUser){
-        throw new CustomError("All fields are required", 400);
+        throw new CustomError("User already exists", 400);
     }
 
     const user = await User.create({
