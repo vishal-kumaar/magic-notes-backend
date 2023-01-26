@@ -7,8 +7,8 @@ import config from "../config/config.js";
 export const isLoggedIn = asyncHandler(async(req, _res, next) => {
     let token;
 
-    if (req.cookies.token || req.headers.authorization && req.headers.authorization.startWith("Bearer")){
-        token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    if (req.cookies.token){
+        token = req.cookies.token
     }
 
     if (!token){
@@ -22,5 +22,14 @@ export const isLoggedIn = asyncHandler(async(req, _res, next) => {
     }
     catch (error) {
         throw new CustomError("Not authorized to access this route", 401);
+    }
+});
+
+export const isLoggedOut = asyncHandler(async(req, _res, next) => {
+    if (req.cookies.token){
+        throw new CustomError("Already logged In", 400);
+    }
+    else{
+        next();
     }
 });
