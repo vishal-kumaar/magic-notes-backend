@@ -228,19 +228,23 @@ export const updatePassword = asyncHandler(async(req, res) => {
         throw new CustomError("Id is required", 400);
     }
 
-    const {oldPassword, newPassword} = req.body;
-    if (!oldPassword || !newPassword){
-        throw new CustomError("Old or new password are required", 400);
+    const {oldPassword, newPassword, confirmPassword} = req.body;
+    if (!oldPassword || !newPassword || !confirmPassword){
+        throw new CustomError("All fields are required", 400);
     }
 
     if (oldPassword === newPassword){
-        throw new CustomError("Both password are password", 400);
+        throw new CustomError("Old and new password are same", 400);
+    }
+
+    if (newPassword !== confirmPassword){
+        throw new CustomError("Wrong confirm new password", 400)
     }
 
     const user = await User.findById(id).select("+password");
 
     if (!user){
-        throw new CustomError("User not found", 400);
+        throw new CustomError("Not authorized to access this route", 401);
     }
 
     const passwordMatched = await user.comparePassword(oldPassword);
@@ -267,6 +271,37 @@ export const updatePassword = asyncHandler(async(req, res) => {
  * @parameters 
  * @return User object
 *********************************************************/
+
+export const updateName = asyncHandler(async(req, res) => {
+    const {id} = req.params;
+    if (!id){
+        throw new CustomError("Id is required", 400)
+    }
+
+    const {newName, password} = req.body;
+    if (!newName || !password){
+        throw new CustomError("All fields are required", 400);
+    }
+
+    const user = await User.findById(id).select("+password");
+    if (!user){
+        throw new CustomError("Not authorized to access this route", 401)
+    }
+
+    const passwordMatched = await user.comparePassword(password)
+
+    if (!passwordMatched){
+        throw new CustomError("Password is wrong", 400);
+    }
+
+    user.name = newName;
+    user.save();
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
 
 export const getProfile = asyncHandler(async(req, res) => {
     const {user} = req;
