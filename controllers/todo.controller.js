@@ -45,15 +45,15 @@ export const createTodo = asyncHander(async(req, res) => {
  * @return Todo Object
  ************************************************/
 
-export const editTask = asyncHander(async(req, res) => {
+export const editTodo = asyncHander(async(req, res) => {
     const {todoId} = req.params;
     if (!todoId){
         throw new CustomError("Todo id is required", 400);
     }
 
-    const {task} = req.body;
-    if (!task) {
-        throw new CustomError("Task is required", 400);
+    const {title, task} = req.body;
+    if (!title || !task) {
+        throw new CustomError("Title or Task are required", 400);
     }
 
     const todo = await Todo.findById(todoId);
@@ -61,8 +61,10 @@ export const editTask = asyncHander(async(req, res) => {
         throw new CustomError("Todo not found", 400);
     }
 
+    todo.title = title;
     todo.task = task;
-    await todo.save({validateBeforeSave: true});
+
+    await todo.save();
 
     res.status(200).json({
         success: true,
@@ -158,31 +160,23 @@ export const deleteTodo = asyncHander(async(req, res) => {
 });
 
 /***************************************************
- * @EDIT_TODO_TITLE
- * @route http://localhost:4000/api/todo/editTitle/:todoId
- * @description User edit todo title controller for editing the exisiting todo title
+ * @GET_TODO
+ * @route http://localhost:4000/api/todo/getTodo/:todoId
+ * @description Get todo controller to get the required todo
  * @parameters todo id
  * @return Todo object
  ************************************************/
 
-export const editTodoTitle = asyncHander(async(req, res) => {
+export const getTodo = asyncHander(async(req, res) => {
     const {todoId} = req.params;
     if (!todoId){
         throw new CustomError("Todo id is required", 400);
-    }
-
-    const {title} = req.body;
-    if (!title){
-        throw new CustomError("Title is required", 400);
     }
 
     const todo = await Todo.findById(todoId);
     if (!todo){
         throw new CustomError("Todo is not exist", 400);
     }
-
-    todo.title = title;
-    await todo.save({validateBeforeSave: true});
 
     res.status(200).json({
         success: true,
