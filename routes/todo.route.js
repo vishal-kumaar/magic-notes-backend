@@ -3,8 +3,8 @@ import {
     getAllTodos,
     createTodo,
     checkTask,
-    editTodoTitle,
-    editTask,
+    getTodo,
+    editTodo,
     deleteTodo
 } from "../controllers/todo.controller.js";
 import {isLoggedIn} from "../middleware/auth.middleware.js";
@@ -12,10 +12,10 @@ import {isLoggedIn} from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.get("/api/todo", isLoggedIn, getAllTodos);
+router.get("/api/todo/getTodo/:todoId",isLoggedIn, getTodo);
 router.post("/api/todo/createTodo",isLoggedIn, createTodo);
 router.put("/api/todo/checkTodo/:todoId",isLoggedIn, checkTask);
-router.put("/api/todo/editTitle/:todoId",isLoggedIn, editTodoTitle);
-router.put("/api/todo/editTask/:todoId",isLoggedIn, editTask);
+router.put("/api/todo/editTodo/:todoId",isLoggedIn, editTodo);
 router.delete("/api/todo/deleteTodo/:todoId",isLoggedIn, deleteTodo);
 
 export default router;
