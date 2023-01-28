@@ -164,7 +164,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
  * @description User reset password controller for reset the password
  * @description User submit email to generate a token
  * @parameters Password and Confirm password
- * @return User object
+ * @return Success message
  ************************************************/
 
 export const resetPassword = asyncHandler(async(req, res) => {
@@ -191,8 +191,6 @@ export const resetPassword = asyncHandler(async(req, res) => {
         forgotPasswordExpiry: {$gt: Date.now()}
     });
 
-    console.log(user);
-
     if (!user){
         throw new CustomError("Something went wrong", 400);
     }
@@ -205,12 +203,9 @@ export const resetPassword = asyncHandler(async(req, res) => {
 
     user.password = undefined;
 
-    const token = user.getJwtToken();
-    res.cookie("token", token, cookieOptions);
-
     res.status(200).json({
         success: true,
-        user
+        message: "Successfully reset password"
     });
 });
 
