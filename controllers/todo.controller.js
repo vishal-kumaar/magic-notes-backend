@@ -16,14 +16,14 @@ export const createTodo = asyncHander(async(req, res) => {
         throw new CustomError("User not found", 400);
     }
 
-    const {title, task} = req.body;
-    if (!title || !task){
-        throw new CustomError("Title or task are required", 400);
+    const {title} = req.body;
+    if (!title){
+        throw new CustomError("Title is required", 400);
     }
 
     const todo = await Todo.create({
         title,
-        task,
+        task: "",
         user: user._id,
     });
 
@@ -122,7 +122,7 @@ export const getAllTodos = asyncHander(async(req, res) => {
 
     const todos = await Todo.find({user: userId});
     if (todos.length == 0){
-        throw new CustomError("Todo not found", 400);
+        throw new CustomError("Todo not found", 404);
     }
 
     res.status(200).json({
