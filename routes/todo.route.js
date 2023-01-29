@@ -12,7 +12,7 @@ import {isLoggedIn} from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.get("/api/todo", isLoggedIn, getAllTodos);
-router.get("/api/todo/getTodo/:todoId",isLoggedIn, getTodo);
+router.put("/api/todo/getTodo/:todoId",isLoggedIn, getTodo);
 router.post("/api/todo/createTodo",isLoggedIn, createTodo);
 router.put("/api/todo/checkTodo/:todoId",isLoggedIn, checkTask);
 router.put("/api/todo/editTodo/:todoId",isLoggedIn, editTodo);
