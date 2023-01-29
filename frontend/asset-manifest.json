@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.853570c8.css",
+    "main.js": "/static/js/main.97266c4b.js",
+    "static/media/color_mode.png": "/static/media/color_mode.5aa66b42e5e4c6d32352.png",
+    "static/media/password_icon.svg": "/static/media/password_icon.76a9d0e08f190855006fc2a919ddef90.svg",
+    "static/media/login_icon.svg": "/static/media/login_icon.37615167db8a3c2fe15a2c072292713b.svg",
+    "static/media/user_icon.svg": "/static/media/user_icon.49273bb96ee6383386c5350b81c9c552.svg",
+    "static/media/notes_icon.svg": "/static/media/notes_icon.738ffc2b7efc01acbf908c239fee5312.svg",
+    "static/media/delete.svg": "/static/media/delete.f232272ba45dbbc3621170b0dbf04914.svg",
+    "static/media/profile-image.svg": "/static/media/profile-image.2806ee3b9928529c0aec85cfa2b8141a.svg",
+    "index.html": "/index.html",
+    "static/media/user_profile.svg": "/static/media/user_profile.144420721cad108df4bbb6f67087480a.svg",
+    "static/media/logout_icon.svg": "/static/media/logout_icon.a5be8db18f0e399027f9b9cf7a56ba4b.svg",
+    "static/media/save.svg": "/static/media/save.88545729656c4854c6351c047822de74.svg",
+    "static/media/right_arrow.svg": "/static/media/right_arrow.5ed356ebbd2c823b80381a41fa6d7327.svg",
+    "static/media/search.svg": "/static/media/search.23dc4063d0920442efc597e5b56dd186.svg",
+    "static/media/left_arrow.svg": "/static/media/left_arrow.43efa158ee13ca42ddf57933c13d0bf7.svg",
+    "main.853570c8.css.map": "/static/css/main.853570c8.css.map",
+    "main.97266c4b.js.map": "/static/js/main.97266c4b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.853570c8.css",
+    "static/js/main.97266c4b.js"
+  ]
+}
