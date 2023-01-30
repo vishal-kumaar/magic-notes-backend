@@ -134,7 +134,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
     const resetToken = await user.generateForgotPasswordToken();
     user.save({validateBeforeSave: true});
 
-    const resetUrl = `http://localhost:3000/password/reset/${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
     const text = `Your password reset url is\n\n${resetUrl}\n\nClick to reset the password and it is valid for 20 minutes`;
 
     try {
