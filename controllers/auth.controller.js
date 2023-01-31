@@ -4,49 +4,79 @@ import CustomError from "../utils/CustomError.js"
 import cookieOptions from "../utils/cookieOptions.js";
 import mailSender from "../utils/mailSender.js";
 import crypto from "crypto";
+import generatePassword from "../utils/generatePassword.js";
 
 /***************************************************
  * @SIGNUP
  * @route http://localhost:4000/api/auth/signup
  * @description User signup controller for creating a new user
- * @parameters name, email, password
- * @return User Object
+ * @description Generate random password
+ * @description Generate OTP to verify email
+ * @parameters name, email
+ * @return Success message and send mail to user
  ************************************************/
 
 export const signUp = asyncHandler(async (req, res) => {
-    const {name, email, password, confirmPassword} = req.body;
+    const {name, email} = req.body;
     
-    if (!name || !email || !password || !confirmPassword){
-        throw new CustomError("All fields are required", 400);
-    }
-
-    if (password !== confirmPassword){
-        throw new CustomError("Wrong confirm password", 400)
+    if (!name || !email){
+        throw new CustomError("Name or email are required", 400);
     }
 
     const existingUser = await User.findOne({email});
 
-    if (existingUser){
+    if (existingUser && existingUser.verified){
         throw new CustomError("User already exists", 400);
     }
 
-    const user = await User.create({
-        name,
-        email,
-        password,
-    });
+    
+    if (existingUser){
+        const otp = await existingUser.generateOTP();
+        existingUser.name = name;
+        await existingUser.save();
 
-    const token = user.getJwtToken();
-    user.password = undefined;
+        const text = `A sign up attempt require further verfication because we did not recognize yourself. To complete sign up, enter the verification code.\n\nUser: ${existingUser.name}\nVerification code: ${otp}\n\nIt is valid for next 30 minutes`;
+        try {
+            mailSender({
+                email,
+                subject: `Verification mail for ${req.get("host")}`,
+                text: text,
+            })
+        } catch (error) {
+            throw new CustomError(error.message || "Mail not sent", 400);
+        }
+    }
+    else {
+        const password = generatePassword();
+        const user = await User.create({
+            name,
+            email,
+            password,
+        });
 
-    res.cookie("token", token, cookieOptions);
+        const otp = await user.generateOTP();
+        await user.save();
+
+        const text = `A sign up attempt require further verfication because we did not recognize yourself. To complete sign up, enter the verification code.\n\nUser: ${name}\nVerification code: ${otp}\n\nIt is valid for next 30 minutes`;
+
+        try {
+            mailSender({
+                email,
+                subject : `Verification mail for ${req.get("host")}`,
+                text: text
+            })
+        } catch (error) {
+            throw new CustomError(error.message || "Mail not sent", 400);
+        }
+    }
 
     res.status(200).json({
         success: true,
-        token,
-        user,
+        message: `Verification code sent to ${email}`
     });
 });
+
+
 
 
 /***************************************************
@@ -140,7 +170,7 @@ export const forgotPassword = asyncHandler(async(req, res) => {
     try {
         mailSender({
             email,
-            subject: 'Password reset mail for localhost',
+            subject: `Password reset mail for ${req.get("host")}`,
             text: text,
         });
 
