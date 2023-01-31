@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
         minLength: [8, "Password must be atleast 8 character"],
         select: false,
     },
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    otp: String,
+    otpExpiry: Date,
     forgotPasswordToken: String,
     forgotPasswordExpiry: Date,
 },
@@ -60,6 +66,18 @@ userSchema.methods = {
 
         return forgotToken;
     },
+    generateOTP: async function(){
+        const digits = '0123456789';
+        let OTP = '';
+        for (let i = 0; i < 6; i++ ) {
+            OTP += digits[Math.floor(Math.random() * 10)];
+        }
+
+        this.otp = crypto.createHash("sha512").update(OTP).digest("hex");
+        this.otpExpiry = Date.now() + 30 * 60 * 1000;
+
+        return OTP;
+    }
 }
 
 export default mongoose.model("User", userSchema);
