@@ -35,7 +35,7 @@ export const signUp = asyncHandler(async (req, res) => {
         existingUser.name = name;
         await existingUser.save();
 
-        const text = `A sign up attempt require further verfication because we did not recognize yourself. To complete sign up, enter the verification code.\n\nUser: ${existingUser.name}\nVerification code: ${otp}\n\nIt is valid for next 30 minutes`;
+        const text = `A sign up attempt require further verfication because we did not recognize yourself. To complete sign up, please enter the OTP.\n\nUser: ${existingUser.name}\nOTP: ${otp}\n\nNOTE:- OTP is only valid for next 30 minutes`;
         try {
             mailSender({
                 email,
@@ -57,7 +57,7 @@ export const signUp = asyncHandler(async (req, res) => {
         const otp = await user.generateOTP();
         await user.save();
 
-        const text = `A sign up attempt require further verfication because we did not recognize yourself. To complete sign up, enter the verification code.\n\nUser: ${name}\nVerification code: ${otp}\n\nIt is valid for next 30 minutes`;
+        const text = `A sign up attempt require further verfication because we did not recognize yourself. To complete sign up, please enter the OTP.\n\nUser: ${name}\nOTP: ${otp}\n\nNOTE:- OTP is only valid for next 30 minutes`;
 
         try {
             mailSender({
@@ -72,12 +72,9 @@ export const signUp = asyncHandler(async (req, res) => {
 
     res.status(200).json({
         success: true,
-        message: `Verification code sent to ${email}`
+        message: `OTP sent to ${email}`
     });
 });
-
-
-
 
 /***************************************************
  * @LOGIN
