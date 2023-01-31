@@ -260,7 +260,7 @@ export const updatePassword = asyncHandler(async(req, res) => {
 });
 
 /********************************************************
- * @GET_PROFILE
+ * @UPDATE_NAME
  * @route https://localhost:4000/api/auth/username/update/:id
  * @description User update name controller for update the old name
  * @parameters new name and password
@@ -288,9 +288,9 @@ export const updateName = asyncHandler(async(req, res) => {
     if (!passwordMatched){
         throw new CustomError("Password is wrong", 400);
     }
-
+    
     user.name = newName;
-    user.save();
+    await user.save();
 
     user.password = undefined;
 
