@@ -49,13 +49,17 @@ export const signUp = asyncHandler(async (req, res) => {
 
             throw new CustomError(error.message || "Mail not sent", 400);
         }
+
+        res.status(200).json({
+            success: true,
+            user: existingUser,
+            message: `OTP sent to ${email}`
+        });
     }
     else {
-        const password = generatePassword();
         const user = await User.create({
             name,
-            email,
-            password,
+            email
         });
 
         const otp = await user.generateOTP();
@@ -76,12 +80,13 @@ export const signUp = asyncHandler(async (req, res) => {
 
             throw new CustomError(error.message || "Mail not sent", 400);
         }
+        res.status(200).json({
+            success: true,
+            user,
+            message: `OTP sent to ${email}`
+        });
     }
 
-    res.status(200).json({
-        success: true,
-        message: `OTP sent to ${email}`
-    });
 });
 
 /***************************************************
@@ -106,16 +111,24 @@ export const verifyUser = asyncHandler(async(req, res) => {
 
     const user = await User.findById(id).select("+password");
     if (!user){
-        throw new CustomError("OTP is required", 400)
+        throw new CustomError("Something went wrong", 400)
+    }
+    
+    if (user.otpExpiry <= Date.now()){
+        throw new CustomError("OTP expired", 400);
     }
 
     const validOTP = (crypto.createHash("sha512").update(otp).digest("hex")) === user.otp;
     if (!validOTP){
         throw new CustomError("OTP is invalid", 400);
     }
+    
+    const password = generatePassword();
+    user.password = password;
+    await user.save();
 
     try {
-        const text = `Congratulations!! Your email is successfully verified and now you are eligible to access our website\n\nYour password: ${user.password}\n\nNOTE:- After successful login change this password for security reasons\n\nThank you for using our website:)`
+        const text = `Congratulations!! Your email is successfully verified and now you are eligible to access our website.\n\nYour password: ${password}\n\nNOTE:- After successful login change this password for security reasons.\n\nThank you for using our website:)`
 
         mailSender({
             email: user.email,
@@ -125,7 +138,8 @@ export const verifyUser = asyncHandler(async(req, res) => {
 
         user.otp = undefined;
         user.otpExpiry = undefined;
-        user.save();
+        user.verified = true;
+        await user.save();
     } catch (error) {
         throw new CustomError(error || "Mail not sent", 400)
     }
