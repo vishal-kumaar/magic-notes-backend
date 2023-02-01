@@ -41,8 +41,12 @@ export const signUp = asyncHandler(async (req, res) => {
                 email,
                 subject: `Verification mail for ${req.get("host")}`,
                 text: text,
-            })
+            });
         } catch (error) {
+            existingUser.otp = undefined;
+            existingUser.otpExpiry = undefined;
+            existingUser.save();
+
             throw new CustomError(error.message || "Mail not sent", 400);
         }
     }
@@ -64,8 +68,12 @@ export const signUp = asyncHandler(async (req, res) => {
                 email,
                 subject : `Verification mail for ${req.get("host")}`,
                 text: text
-            })
+            });
         } catch (error) {
+            user.otp = undefined;
+            user.otpExpiry = undefined;
+            user.save();
+
             throw new CustomError(error.message || "Mail not sent", 400);
         }
     }
@@ -73,6 +81,58 @@ export const signUp = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         message: `OTP sent to ${email}`
+    });
+});
+
+/***************************************************
+ * @VERIFY_USER
+ * @route http://localhost:4000/api/auth/user/verify/id
+ * @description Verify user controller for verifying new user
+ * @description Verify OTP and mail password to the user
+ * @parameters userId, OTP
+ * @return Success message
+ ************************************************/
+
+export const verifyUser = asyncHandler(async(req, res) => {
+    const {id} = req.params;
+    if (!id){
+        throw new CustomError("User id is required", 400);
+    }
+
+    const {otp} = req.body;
+    if (!otp){
+        throw new CustomError("OTP is required", 400)
+    }
+
+    const user = await User.findById(id).select("+password");
+    if (!user){
+        throw new CustomError("OTP is required", 400)
+    }
+
+    const validOTP = (crypto.createHash("sha512").update(otp).digest("hex")) === user.otp;
+    if (!validOTP){
+        throw new CustomError("OTP is invalid", 400);
+    }
+
+    try {
+        const text = `Congratulations!! Your email is successfully verified and now you are eligible to access our website\n\nYour password: ${user.password}\n\nNOTE:- After successful login change this password for security reasons\n\nThank you for using our website:)`
+
+        mailSender({
+            email: user.email,
+            subject: `Your password for ${req.get("host")}`,
+            text: text
+        });
+
+        user.otp = undefined;
+        user.otpExpiry = undefined;
+        user.save();
+    } catch (error) {
+        throw new CustomError(error || "Mail not sent", 400)
+    }
+
+    res.status(200).json({
+        success: true,
+        message: `Password sent to ${user.email}`
     });
 });
 
