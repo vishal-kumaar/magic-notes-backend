@@ -1,6 +1,7 @@
 import express from "express";
 import {
     signUp,
+    verifyUser,
     logIn,
     logOut,
     updatePassword,
@@ -14,6 +15,7 @@ import {isLoggedIn, isLoggedOut} from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.post("/api/auth/signup", isLoggedOut, signUp);
+router.put("/api/auth/user/verify/:id", isLoggedOut, verifyUser);
 router.post("/api/auth/login", isLoggedOut, logIn);
 router.get("/api/auth/logout",isLoggedIn, logOut);
 router.put("/api/auth/password/forgot", isLoggedOut, forgotPassword);
