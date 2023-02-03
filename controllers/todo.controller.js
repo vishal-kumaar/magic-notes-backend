@@ -52,8 +52,8 @@ export const editTodo = asyncHander(async(req, res) => {
     }
 
     const {title, task} = req.body;
-    if (!title || !task) {
-        throw new CustomError("Title or Task are required", 400);
+    if (!title) {
+        throw new CustomError("Title is required", 400);
     }
 
     const todo = await Todo.findById(todoId);
@@ -156,6 +156,7 @@ export const deleteTodo = asyncHander(async(req, res) => {
     res.status(200).json({
         succes: true,
         messase: "Todo deleted successfully",
+        todo
     })
 });
 
@@ -181,5 +182,48 @@ export const getTodo = asyncHander(async(req, res) => {
     res.status(200).json({
         success: true,
         todo
+    })
+});
+
+/***************************************************
+ * @SEARCH_TODO
+ * @route http://localhost:4000/api/todo/search
+ * @description Search todo controller to search todo
+ * @parameters User input
+ * @return Todos object
+ ************************************************/
+
+export const searchTodo = asyncHander(async(req, res) => {
+    const {input} = req.query;
+    if (!input){
+        throw new CustomError("Input field required", 400);
+    }
+
+    const {user} = req;
+    const todos = await Todo.find({ 
+        $or:[
+            {
+                $and:[
+                    {title:  new RegExp(input, "i") },
+                    {user: user._id}
+                ]
+            },
+            {
+                $and:[
+                    {'task' : new RegExp(input, "i")},
+                    {user: user._id}
+                ]
+                
+            }
+        ]
+    });
+
+    if (todos.length === 0){
+        throw new CustomError("Todo not found", 404)
+    }
+
+    res.status(200).json({
+        success: true,
+        todos
     })
 });
