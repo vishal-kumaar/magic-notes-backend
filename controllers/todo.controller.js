@@ -195,9 +195,6 @@ export const getTodo = asyncHander(async(req, res) => {
 
 export const searchTodo = asyncHander(async(req, res) => {
     const {input} = req.query;
-    if (!input){
-        throw new CustomError("Input field required", 400);
-    }
 
     const {user} = req;
     const todos = await Todo.find({ 
