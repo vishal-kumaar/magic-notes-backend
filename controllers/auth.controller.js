@@ -9,7 +9,8 @@ import config from "../config/config.js";
 
 /***************************************************
  * @SIGNUP
- * @route http://localhost:4000/api/auth/signup
+ * @METHOD POST
+ * @route /api/auth/signup
  * @description User signup controller for creating a new user
  * @description Generate random password
  * @description Generate OTP to verify email
@@ -92,7 +93,8 @@ export const signUp = asyncHandler(async (req, res) => {
 
 /***************************************************
  * @VERIFY_USER
- * @route http://localhost:4000/api/auth/user/verify/id
+ * @METHOD PUT
+ * @route /api/auth/user/verify/id
  * @description Verify user controller for verifying new user
  * @description Verify OTP and mail password to the user
  * @parameters userId, OTP
@@ -153,7 +155,8 @@ export const verifyUser = asyncHandler(async(req, res) => {
 
 /***************************************************
  * @LOGIN
- * @route http://localhost:4000/api/auth/login
+ * @METHOD POST
+ * @route /api/auth/login
  * @description User login controller for login an existing user
  * @parameters email, password
  * @return User Object
@@ -192,7 +195,8 @@ export const logIn = asyncHandler(async (req, res) => {
 
 /***************************************************
  * @LOGOUT
- * @route http://localhost:4000/api/auth/logout
+ * @METHOD GET
+ * @route /api/auth/logout
  * @description User logout controller for logout an logged in user by clearing the cookies
  * @parameters None
  * @return Success message
@@ -212,7 +216,8 @@ export const logOut = asyncHandler(async(_req, res) => {
 
 /***************************************************
  * @FORGOT_PASSWORD
- * @route http://localhost:4000/api/auth/password/forgot
+ * @METHOD PUT
+ * @route /api/auth/password/forgot
  * @description User forgot password controller for forgot the password
  * @description User submit email to generate a forget password token
  * @description User receives an url to forgot the password
@@ -267,7 +272,8 @@ export const forgotPassword = asyncHandler(async(req, res) => {
 
 /***************************************************
  * @RESET_PASSWORD
- * @route http://localhost:4000/api/auth/password/reset/resetToken
+ * @METHOD PUT
+ * @route /api/auth/password/reset/resetToken
  * @description User reset password controller for reset the password
  * @description User submit email to generate a token
  * @parameters Password and Confirm password
@@ -318,7 +324,8 @@ export const resetPassword = asyncHandler(async(req, res) => {
 
 /***************************************************
  * @UPDATE_PASSWORD
- * @route http://localhost:4000/api/auth/password/update/id
+ * @METHOD PUT
+ * @route /api/auth/password/update/id
  * @description User update password controller for update the old password
  * @parameters Old password and new password
  * @return Success message with user object
@@ -369,7 +376,8 @@ export const updatePassword = asyncHandler(async(req, res) => {
 
 /********************************************************
  * @UPDATE_NAME
- * @route https://localhost:4000/api/auth/username/update/:id
+ * @METHOD PUT
+ * @route /api/auth/username/update/:id
  * @description User update name controller for update the old name
  * @parameters new name and password
  * @return Success message with user object
@@ -410,7 +418,8 @@ export const updateName = asyncHandler(async(req, res) => {
 
 /********************************************************
  * @GET_PROFILE
- * @route https://localhost:4000/api/auth/profile
+ * @METHOD GET
+ * @route /api/auth/profile
  * @description Check for token and populate req.user
  * @parameters 
  * @return User object

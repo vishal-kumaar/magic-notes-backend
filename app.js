@@ -1,6 +1,6 @@
 import express from "express";
 import userRoute from "./routes/user.route.js";
-import todoRoute from "./routes/todo.route.js";
+import noteRoute from "./routes/note.route.js";
 import cookieParsar from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
@@ -16,18 +16,16 @@ app.use(cors());
 app.use(cookieParsar());
 app.use(morgan("tiny"));
 
+app.use("/api/auth", userRoute);
+app.use("/api/note", noteRoute);
+
 if (config.NODE_ENV){
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     app.use(express.static(path.join(__dirname, "./frontend")));
-    app.use("/", userRoute);
-    app.use("/", todoRoute);
     app.get("*", (req, res) => {
         res.sendFile(path.join(__dirname, "./frontend/index.html"));
     })
-}else{
-    app.use("/", userRoute);
-    app.use("/", todoRoute);
 }
 
 export default app;

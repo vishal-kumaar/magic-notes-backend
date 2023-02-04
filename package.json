@@ -1,7 +1,7 @@
 {
-  "name": "Todo-App",
+  "name": "Note App",
   "version": "1.0.0",
-  "description": "This is the backend of the Todo Application. Todo app is the application where user can save there task to remember",
+  "description": "This is the backend of the Note Application. Note app is the application where user can save there notes to remember",
   "main": "index.js",
   "type": "module",
   "scripts": {
