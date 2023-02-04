@@ -23,7 +23,7 @@ if (config.NODE_ENV){
     app.use("/", userRoute);
     app.use("/", todoRoute);
     app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "./frontend"));
+        res.sendFile(path.join(__dirname, "./frontend/index.html"));
     })
 }else{
     app.use("/", userRoute);
