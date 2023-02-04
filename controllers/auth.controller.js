@@ -5,6 +5,7 @@ import cookieOptions from "../utils/cookieOptions.js";
 import mailSender from "../utils/mailSender.js";
 import crypto from "crypto";
 import generatePassword from "../utils/generatePassword.js";
+import config from "../config/config.js";
 
 /***************************************************
  * @SIGNUP
@@ -235,7 +236,12 @@ export const forgotPassword = asyncHandler(async(req, res) => {
     const resetToken = await user.generateForgotPasswordToken();
     user.save({validateBeforeSave: true});
 
-    const resetUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+    let protocol = "http";
+    if (config.NODE_ENV === "production"){
+        protocol = "https";
+    }
+    const resetUrl = `${protocol}://${req.get("host")}/password/reset/${resetToken}`;
+    
     const text = `Your password reset url is\n\n${resetUrl}\n\nClick to reset the password and it is valid for 20 minutes`;
 
     try {
@@ -320,6 +326,7 @@ export const resetPassword = asyncHandler(async(req, res) => {
 
 export const updatePassword = asyncHandler(async(req, res) => {
     const {id} = req.params;
+
     if (!id){
         throw new CustomError("Id is required", 400);
     }
