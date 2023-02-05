@@ -1,6 +1,7 @@
 import Note from "../models/note.schema.js";
 import asyncHander from "../helpers/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
+import sortByDate from "../utils/sortByTime.js";
 
 /***************************************************
  * @CREATE_NOTE
@@ -147,7 +148,7 @@ export const getAllNotes = asyncHander(async(req, res) => {
 
     res.status(200).json({
         success: true,
-        notes
+        notes: notes.sort(sortByDate)
     });
 });
 
@@ -187,7 +188,7 @@ export const searchNotes = asyncHander(async(req, res) => {
 
     res.status(200).json({
         success: true,
-        notes
+        notes: notes.reverse()
     })
 });
 
