@@ -27,7 +27,7 @@
 
 ---
 
-The main tech stack that I use to create this full stack notes taking web application are:
+**📌 The main tech stack that I use to create this full stack notes taking web application are:**
 
 - <a href="https://mongoosejs.com/" target="_blank">MongoDB</a>
 - <a href="https://expressjs.com/" target="_blank">ExpressJS</a>
@@ -35,6 +35,25 @@ The main tech stack that I use to create this full stack notes taking web applic
 - <a href="https://nodejs.org/" target="_blank">NodeJS</a>
 - <a href="https://mongoosejs.com/" target="_blank">Mongoose</a>
 - <a href="https://tailwindcss.com" target="_blank">Tailwind CSS</a>
+
+👉 <a href="https://github.com/vishal-kumaar/magic-notes-frontend" target="_blank">Click here</a> **to see the frontend part.**
+
+<hr />
+
+## 😍 Features
+
+**This website have many functionalities such as:-**
+
+    👉 Dark/Light Theme,
+    👉 User Auth (Login/Signup),
+    👉 Forgot Password,
+    👉 Update/Reset Password,
+    👉 Create Note,
+    👉 Edit Note,
+    👉 Mark Note,
+    👉 Search Note,
+    👉 Delete Note, etc.
+    
 
 ## 💻 Clone project
 
@@ -44,19 +63,23 @@ To clone this project in your local system, write the below command in your term
 git clone https://github.com/vishal-kumaar/magic-notes.git
 ```
 
+<br />
+
 **Note:-** Also create a `.env` file in this project's root directory with the keys and values as follow.
 
 ```javascript
-PORT=enterPort
-MONGODB_URI=enterMongoURI
-JWT_SECRET=enterJwtSecret
-JWT_EXPIRY=enterJwtExpiry
-SMTP_SERVICE=enterSmtpService
-SMTP_USERNAME=enterSmtpUsername
-SMTP_PASSWORD=enterSmtpPassword
-SMTP_EMAIL=enterSmptEmail
-NODE_ENV=enterNodeEnv
+PORT = enterPort;
+MONGODB_URI = enterMongoURI;
+JWT_SECRET = enterJwtSecret;
+JWT_EXPIRY = enterJwtExpiry;
+SMTP_SERVICE = enterSmtpService;
+SMTP_USERNAME = enterSmtpUsername;
+SMTP_PASSWORD = enterSmtpPassword;
+SMTP_EMAIL = enterSmptEmail;
+NODE_ENV = enterNodeEnv;
 ```
+
+<br />
 
 ## 📜 Available Scripts
 
