@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const noteSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: [true, "Title is required"],
         maxLength: [50, "Title must be at most 50 characters"],
         trim: true,
     },
