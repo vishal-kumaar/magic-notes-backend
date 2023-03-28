@@ -8,19 +8,19 @@ import sortByDate from "../utils/sortByTime.js";
  * @METHOD POST
  * @route /api/note/createNote
  * @description User create note controller for creating a new note
- * @parameters user object, title and task
+ * @parameters user object, title and body
  * @return Note Object
  ************************************************/
 
 export const createNote = asyncHander(async(req, res) => {
-    const {title} = req.body;
-    if (!title){
-        throw new CustomError("Title is required", 400);
+    const {title, body} = req.body;
+    if (!title && !body){
+        throw new CustomError("Title/note are required", 400);
     }
 
     const note = await Note.create({
         title,
-        body: "",
+        body: body,
         user: req.user._id,
     });
 
