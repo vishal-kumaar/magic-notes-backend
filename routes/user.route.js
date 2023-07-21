@@ -10,16 +10,16 @@ import {
     updateName,
     getProfile
 } from "../controllers/auth.controller.js";
-import {isLoggedIn, isLoggedOut} from "../middleware/auth.middleware.js";
+import {isLoggedIn} from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/signup", isLoggedOut, signUp);
-router.put("/user/verify/:id", isLoggedOut, verifyUser);
-router.post("/login", isLoggedOut, logIn);
-router.get("/logout",isLoggedIn, logOut);
-router.put("/password/forgot", isLoggedOut, forgotPassword);
-router.put("/password/reset/:resetToken", isLoggedOut, resetPassword);
+router.post("/signup", signUp);
+router.put("/user/verify/:id", verifyUser);
+router.post("/login", logIn);
+router.get("/logout", logOut);
+router.put("/password/forgot", forgotPassword);
+router.put("/password/reset/:resetToken", resetPassword);
 router.put("/password/update/:id",isLoggedIn, updatePassword);
 router.put("/username/update/:id",isLoggedIn, updateName);
 router.get("/profile",isLoggedIn, getProfile);

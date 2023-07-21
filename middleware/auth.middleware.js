@@ -25,11 +25,20 @@ export const isLoggedIn = asyncHandler(async(req, _res, next) => {
     }
 });
 
-export const isLoggedOut = asyncHandler(async(req, _res, next) => {
-    if (req.cookies.token){
-        throw new CustomError("Already logged In", 400);
+export const isAuthor = asyncHandler(async(req, _res, next) => {
+    const {user} = req;
+    const {noteId} = req.params;
+
+    
+    const note = await User.findById(noteId);
+    
+    if (!note){
+        throw new CustomError("Not not found", 404)
     }
-    else{
-        next();
+
+    if (!note.user.equals(user._id)){
+        throw new CustomError("You are not the author of this note", 403)
     }
+    
+    next();
 });
