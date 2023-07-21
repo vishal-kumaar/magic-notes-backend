@@ -3,7 +3,6 @@ import {
     signUp,
     verifyUser,
     logIn,
-    logOut,
     updatePassword,
     resetPassword,
     forgotPassword,
@@ -17,7 +16,6 @@ const router = express.Router();
 router.post("/signup", signUp);
 router.put("/user/verify/:id", verifyUser);
 router.post("/login", logIn);
-router.get("/logout", logOut);
 router.put("/password/forgot", forgotPassword);
 router.put("/password/reset/:resetToken", resetPassword);
 router.put("/password/update/:id",isLoggedIn, updatePassword);
