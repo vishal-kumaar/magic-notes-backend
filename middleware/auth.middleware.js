@@ -5,11 +5,7 @@ import CustomError from "../utils/CustomError.js";
 import config from "../config/config.js";
 
 export const isLoggedIn = asyncHandler(async(req, _res, next) => {
-    let token;
-
-    if (req.cookies.token){
-        token = req.cookies.token
-    }
+    const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token){
         throw new CustomError("Not authorized to access this route", 401);
@@ -21,7 +17,7 @@ export const isLoggedIn = asyncHandler(async(req, _res, next) => {
         next();
     }
     catch (error) {
-        throw new CustomError("Not authorized to access this route", 401);
+        throw new CustomError("Session expired! Login to continue", 401);
     }
 });
 
