@@ -1,7 +1,6 @@
 import User from "../models/user.schema.js";
 import asyncHandler from "../helpers/asyncHandler.js";
 import CustomError from "../utils/CustomError.js"
-import cookieOptions from "../utils/cookieOptions.js";
 import mailSender from "../utils/mailSender.js";
 import crypto from "crypto";
 import generatePassword from "../utils/generatePassword.js";
@@ -183,8 +182,6 @@ export const logIn = asyncHandler(async (req, res) => {
 
     const token = user.getJwtToken();
     user.password = undefined;
-
-    res.cookie("token", token, cookieOptions);
 
     res.status(200).json({
         success: true,
