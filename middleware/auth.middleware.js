@@ -3,6 +3,7 @@ import Jwt from "jsonwebtoken";
 import asyncHandler from "../helpers/asyncHandler.js";
 import CustomError from "../utils/CustomError.js";
 import config from "../config/config.js";
+import Note from "../models/note.schema.js";
 
 export const isLoggedIn = asyncHandler(async(req, _res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -26,7 +27,7 @@ export const isAuthor = asyncHandler(async(req, _res, next) => {
     const {noteId} = req.params;
 
     
-    const note = await User.findById(noteId);
+    const note = await Note.findById(noteId);
     
     if (!note){
         throw new CustomError("Not not found", 404)
