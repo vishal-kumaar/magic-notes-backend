@@ -1,6 +1,6 @@
 {
-  "name": "Magic Notes Backend",
-  "version": "2.0.0",
+  "name": "magic-notes-backend",
+  "version": "2.0.1",
   "description": "This is the backend of the Note Application. Note app is the application where user can save there notes to remember",
   "main": "index.js",
   "type": "module",
