@@ -11,7 +11,7 @@ const config = {
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
     SMTP_EMAIL: process.env.SMTP_EMAIL,
     NODE_ENV: process.env.NODE_ENV,
-    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS.split(",")
 }
 
 export default config;
