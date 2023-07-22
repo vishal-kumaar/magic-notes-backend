@@ -19,7 +19,7 @@ export const createNote = asyncHander(async (req, res) => {
 
   const note = await Note.create({
     title,
-    body: "",
+    body,
     user: req.user._id,
   });
 
