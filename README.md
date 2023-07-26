@@ -1,6 +1,6 @@
-<a href="https://magicnotes.up.railway.app/" target="_blank">🔗 Project Live Link</a>
+<a href="https://mymagicnotes.vercel.app/" target="_blank">🔗 Project Live Link</a>
 
-<h1 align="center">Magic Notes</h1>
+<h1 align="center">Magic Notes Backend</h1>
 
 <p align="center">
     <b>This is the dynamic, good looking, and responsive full stack notes taking web application.</b> 
